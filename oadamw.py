@@ -243,7 +243,7 @@ class OAdamW(OptimiOptimizer):
     def __init__(
         self,
         params: torch.nn.Module | Iterable[Tensor] | Iterable[dict],
-        training_args: None,
+        training_args: None = None,
         lr: float = 1e-3,
         betas: tuple[float, float] = (0.9, 0.99),
         weight_decay: float = 1e-2,
@@ -264,10 +264,11 @@ class OAdamW(OptimiOptimizer):
         if not 0.0 <= eps:
             raise ValueError(f"Invalid epsilon: {eps=}")
 
-        if training_args.learning_rate:
-            lr = training_args.learning_rate
-        if training_args.weight_decay:
-            weight_decay = training_args.weight_decay
+        if training_args is not None:
+            if training_args.learning_rate is not None:
+                lr = training_args.learning_rate
+            if training_args.weight_decay is not None:
+                weight_decay = training_args.weight_decay
 
         defaults = dict(
             lr=lr,
